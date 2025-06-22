@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoStart - AlgoStart®</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Palette de Couleurs: Nouveau Vert primaire (#015F5C), Blanc pur (#FFFFFF), Gris clair (#F2F2F2), Gris charbon (#333333), Bleu-vert tech (#00B8A9) -->
+    <!-- Plan de la Structure de l'Application: La SPA est conçue pour reproduire fidèlement le design des maquettes fournies, en organisant le contenu en sections claires : Accueil (présentation et CTA), Le Produit (détails, avantages, visuels), Applications (marchés ciblés), À Propos (mission, vision), Ressources (documents techniques), FAQ (questions-réponses), et Contact (formulaire, coordonnées). Un chatbot fonctionnel est intégré pour une assistance dynamique. Cette architecture non linéaire facilite l'accès rapide aux informations pour le public B2B, tandis que les transitions fluides améliorent l'expérience. -->
+    <!-- Choix de Visualisation et Contenu:
+        - Informations du Rapport: Conception globale des photos (logo, emballage, produit, sections). -> Objectif: Réplication visuelle exacte. -> Méthode de Visualisation/Présentation: Tailwind CSS et CSS personnalisé pour reproduire les mises en page, les couleurs, les typographies. Utilisation des URLs directes fournies pour le logo, l'image d'accueil et l'image du produit. -> Interaction: Navigation fluide par défilement. -> Justification: Respect maximal du design visuel imposé. -> Librairie/Méthode: HTML/CSS/Tailwind/URLs d'images.
+        - Informations du Rapport: Forme du produit (disque). -> Objectif: Représentation visuelle concrète. -> Méthode de Visualisation/Présentation: Création d'une forme de disque stylisée en CSS. -> Interaction: Aucune. -> Justification: Permet d'intégrer le visuel clé du produit sans dépendre d'une image externe. -> Librairie/Méthode: HTML/CSS.
+        - Informations du Rapport: Avantages/Performances (fermentation en 6h). -> Objectif: Mettre en évidence un avantage clé. -> Méthode de Visualisation/Présentation: Graphique à barres comparatif. -> Interaction: Info-bulle au survol. -> Justification: Visualisation rapide et claire d'une donnée quantitative importante. -> Librairie/Méthode: Chart.js.
+        - Informations du Rapport: FAQ. -> Objectif: Répondre aux questions courantes. -> Méthode de Visualisation/Présentation: Section accordéon. -> Interaction: Clic pour déplier/replier. -> Justification: Optimise l'espace et l'engagement pour les informations fréquentes. -> Librairie/Méthode: HTML/JS.
+        - Informations du Rapport: Support client, devis, choix de pureté. -> Objectif: Support interactif et personnalisé. -> Méthode de Visualisation/Présentation: Chatbot IA. -> Interaction: Conversationnel (saisie texte, réponses IA). -> Justification: Offre une assistance immédiate et intelligente, couvrant les aspects complexes du B2B. -> Librairie/Méthode: HTML/JS/Gemini API.
+        - Informations du Rapport: Module de commande / Espace Pro. -> Objectif: Présenter les fonctionnalités futures. -> Méthode de Visualisation/Présentation: Formulaires et liens factices. -> Interaction: Saisie de données (pour démo), clics sur liens. -> Justification: Illustre les fonctionnalités clés sans implémenter de backend, laissant le chatbot prendre le relais pour le "fonctionnel". -> Librairie/Méthode: HTML/Tailwind CSS.
+    -->
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: #333333; /* Gris charbon */
+            background-color: #F2F2F2; /* Gris clair */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            color: #333333;
+        }
+        /* Nouvelle couleur primaire partout où le vert était utilisé */
+        .text-primary {
+            color: #015F5C; /* Nouveau Vert primaire */
+        }
+        .bg-primary {
+            background-color: #015F5C; /* Nouveau Vert primaire */
+        }
+        .btn-primary {
+            background-color: #015F5C; /* Nouveau Vert primaire */
+            color: #FFFFFF;
+        }
+        .btn-secondary {
+            background-color: #00B8A9; /* Bleu-vert tech (couleur secondaire inchangée) */
+            color: #FFFFFF;
+        }
+        .border-primary {
+            border-color: #015F5C; /* Nouveau Vert primaire */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        /* Product Disk Visual - Réplique le design vert et l'effet de profondeur */
+        .product-disk {
+            width: 200px; /* Taille encore plus grande */
+            height: 200px;
+            background: radial-gradient(circle at 30% 30%, #00B8A9, #015F5C); /* Dégradé avec nouveau vert */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1); /* Ombre interne et externe ajustées */
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #F2F2F2; /* Bord blanc/gris clair pour détacher */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .product-disk span {
+            color: white;
+            font-size: 3rem; /* Taille ajustée pour le "6H" */
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4); /* Ombre portée pour le texte */
+        }
+
+        /* Chatbot specific styles - Adapted from user's provided code */
+        #chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #015F5C; /* Custom primary green color */
+            color: white;
+            padding: 10px 15px; /* Adjusted padding */
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex; /* For centering content */
+            align-items: center;
+            justify-content: center;
+            width: 60px; /* Fixed size */
+            height: 60px; /* Fixed size */
+        }
+        #chat-button:hover {
+            transform: scale(1.05);
+        }
+
+        #chat-window {
+            position: fixed;
+            bottom: 100px; /* Adjust from 70px to match previous design */
+            right: 20px;
+            z-index: 1000;
+            width: 90%; /* Responsive width */
+            max-width: 380px; /* Max width */
+            height: 70vh; /* Responsive height */
+            max-height: 500px; /* Max height */
+            background: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 0.75rem; /* Match site's rounded corners */
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Stronger shadow for pop-up */
+            overflow: hidden;
+            opacity: 0; /* Initial state for fade-in */
+            visibility: hidden; /* Hide initially for transition */
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        #chat-window.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .chat-header { /* Re-added for good UX */
+            background-color: #015F5C; /* Primary green */
+            color: white;
+            padding: 1rem;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chat-messages {
+            flex: 1;
+            padding: 1rem; /* Adjusted padding */
+            overflow-y: auto;
+            font-family: 'Open Sans', sans-serif; /* Match site font */
+            font-size: 14px;
+            background-color: #f9fafb; /* Light gray background */
+            border-bottom: 1px solid #e5e7eb; /* Subtle separator */
+        }
+
+        .message {
+            margin-bottom: 0.75rem; /* Adjusted margin */
+            padding: 0.5rem 0.75rem; /* Adjusted padding */
+            border-radius: 0.75rem; /* Match site's rounded corners */
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            margin-left: auto; /* Align right */
+            background-color: #e0f2f1; /* Light green/blue */
+            color: #015F5C; /* Primary green */
+            border-radius: 0.75rem 0.75rem 0.1rem 0.75rem; /* Adjusted corner */
+        }
+
+        .message.bot {
+            margin-right: auto; /* Align left */
+            background-color: #f3f4f6; /* Lighter gray */
+            color: #333333; /* Charcoal gray */
+            border-radius: 0.75rem 0.75rem 0.75rem 0.1rem; /* Adjusted corner */
+        }
+
+        #chat-input {
+            display: flex;
+            flex-direction: column; /* To stack input and buttons */
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb; /* Match site's border color */
+            gap: 0.5rem; /* Spacing between elements */
+            background-color: #ffffff;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 0.75rem; /* Adjusted padding */
+            border-radius: 0.5rem; /* Match site's rounded corners */
+            border: 1px solid #d1d5db; /* Match site's border color */
+            margin-bottom: 0; /* Remove specific margin here as gap handles it */
+        }
+
+        #send-button {
+            background-color: #015F5C; /* Primary green */
+            color: white;
+            padding: 0.75rem 1rem; /* Adjusted padding */
+            border-radius: 0.5rem; /* Match site's rounded corners */
+            cursor: pointer;
+            align-self: flex-end; /* Keep send button aligned right */
+            border: none; /* Remove default button border */
+        }
+
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .loading-dots span {
+            width: 8px; /* Larger dots */
+            height: 8px;
+            margin: 0 4px; /* More spacing */
+            background-color: #015F5C; /* Primary green color */
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both; /* Adjusted animation speed */
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .chat-feature-buttons { /* New container for feature buttons */
+            display: flex;
+            flex-wrap: wrap; /* Allow buttons to wrap */
+            gap: 0.5rem; /* Space between buttons */
+            width: 100%; /* Take full width */
+            justify-content: space-between; /* Distribute buttons */
+            margin-bottom: 0.5rem; /* Margin before input field */
+        }
+
+        .btn-chat-feature { /* Styling for feature buttons */
+            background-color: #00B8A9; /* Secondary blue-green color */
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem; /* Smaller font for features */
+            flex-grow: 1; /* Allow buttons to grow */
+            text-align: center;
+            border: none; /* Remove default button border */
+        }
+        .btn-chat-feature:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="bg-[#F2F2F2] text-[#333333]">
+
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo ALGAENOL - Note: Logo image still says ALGAENOL -->
+            <a href="#accueil" class="flex items-center">
+                <img src="https://i.imgur.com/i1TFYcJ.png" alt="Logo AlgoStart Principal" class="h-16 md:h-24">
+            </a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#produit" class="text-gray-600 hover:text-primary font-semibold">Le Produit</a>
+                <a href="#applications" class="text-gray-600 hover:text-primary font-semibold">Applications</a>
+                <a href="#apropos" class="text-gray-600 hover:text-primary font-semibold">À Propos</a>
+                <a href="#faq" class="text-gray-600 hover:text-primary font-semibold">FAQ</a>
+                <a href="#contact" class="text-gray-600 hover:text-primary font-semibold">Contact</a>
+                <a href="#contact" class="btn-primary text-white font-bold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition-shadow">Demander un Devis</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <a href="#produit" class="block py-3 px-6 text-sm text-gray-700 hover:bg-gray-100">Le Produit</a>
+            <a href="#applications" class="block py-3 px-6 text-sm text-gray-700 hover:bg-gray-100">Applications</a>
+            <a href="#apropos" class="block py-3 px-6 text-sm text-gray-700 hover:bg-gray-100">À Propos</a>
+            <a href="#faq" class="block py-3 px-6 text-sm text-gray-700 hover:bg-gray-100">FAQ</a>
+            <a href="#contact" class="block py-3 px-6 text-sm text-gray-700 hover:bg-gray-100">Contact</a>
+            <a href="#contact" class="block py-3 px-6 text-sm text-primary font-bold">Demander un Devis</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="accueil" class="pt-24 pb-16 bg-primary"> <!-- Fond de la page d'accueil en vert #015F5C -->
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left text-white"> <!-- Texte en blanc pour contraste -->
+                        <h1 class="font-bold leading-tight mb-4 text-white"> <!-- Titre en blanc -->
+                            <span class="text-5xl md:text-6xl font-extrabold block">AlgoStart®</span>
+                            <span class="text-lg md:text-xl font-normal block mt-2">Démarrez vert, démarrez AlgoStart</span>
+                        </h1>
+                        <p class="text-lg mb-8">Starter d’éthanol à base de spiruline, pour une fermentation rapide, sûre et écologique, répondant aux besoins des industries modernes.</p>
+                        <div class="flex flex-col sm:flex-row justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                            <a href="#produit" class="btn-primary font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-shadow">Découvrir AlgoStart</a>
+                            <a href="#ressources" class="btn-secondary font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-shadow">Fiches Techniques</a>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- Image de la boîte et du sachet AlgoStart pour la section Accueil -->
+                        <img src="https://i.imgur.com/d3jOmbe.jpg" alt="[Image de la boîte et du sachet AlgoStart]" class="rounded-lg shadow-2xl mx-auto w-full h-auto" onerror="this.onerror=null;this.src='https://i.imgur.com/d3jOmbe.jpg';">
+                        <p class="text-center text-sm text-white/80 mt-2">Représentation du produit AlgoStart® dans la section d'accueil</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="produit" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-4">Le Produit : AlgoStart®</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-12">Cette section détaille tout ce que vous devez savoir sur AlgoStart®, notre starter d'éthanol révolutionnaire. Découvrez sa composition unique, ses avantages clés, et un guide d'utilisation simple pour une performance optimale.</p>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-12 mb-16">
+                    <div class="flex flex-col items-center gap-4">
+                        <!-- Image du disque de spiruline pour la section produit (rétablie) -->
+                        <img src="https://i.imgur.com/iYBlL2F.png" alt="[Image de la Pilule Verte AlgoStart]" class="rounded-lg shadow-md w-full max-w-xs sm:max-w-sm object-cover" onerror="this.onerror=null;this.src='https://i.imgur.com/iYBlL2F.png';">
+                        <!-- Cercle 6H agrandi et en bas de la photo -->
+                        <div class="product-disk"><span>6H</span></div> 
+                    </div>
+                    
+                    <div class="text-left max-w-xl">
+                        <h3 class="text-2xl font-bold text-primary mb-3">Forme Galénique et Composition</h3>
+                        <!-- Texte réduit pour "Forme Galénique" -->
+                        <p class="text-gray-700 mb-4">AlgoStart® est un disque de coton stérile (Ø 5cm) encapsulant des agents biologiques à base de spiruline. Activez-le dans l'eau pour une fermentation rapide produisant de l'éthanol en seulement 6 heures.</p>
+                        <ul class="space-y-2">
+                            <li class="flex items-start"><span class="text-primary mr-2 font-bold">✔</span><span>100% Biodégradable et durable.</span></li>
+                            <li class="flex items-start"><span class="text-primary mr-2 font-bold">✔</span><span>Stable à température ambiante pour un stockage facile.</span></li>
+                            <li class="flex items-start"><span class="text-primary mr-2 font-bold">✔</span><span>Simple d'utilisation, sans équipement complexe.</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-gray-800 mb-8">Performance Inégalée</h3>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-8">Ce graphique compare le temps de fermentation d'AlgoStart® à celui des starters traditionnels. L'interaction avec le graphique vous donnera les chiffres précis, illustrant clairement notre avantage en termes d'efficacité.</p>
+                <div class="chart-container bg-white p-4 rounded-lg shadow-lg"><canvas id="performanceChart"></canvas></div>
+            </div>
+        </section>
+
+        <section id="applications" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-4">Applications Versatiles</h2>
+                 <p class="max-w-3xl mx-auto text-gray-600 mb-12">La flexibilité d'AlgoStart® lui permet de s'adapter à de nombreux secteurs industriels. Explorez ici les principaux domaines où notre technologie peut optimiser vos processus et contribuer à vos objectifs de durabilité.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-xl transition-shadow">
+                        <div class="text-4xl mb-4">💊</div><h3 class="text-xl font-bold mb-2">Laboratoires Pharmaceutiques</h3>
+                        <p class="text-gray-600">Production d'éthanol pour solvants, excipients ou bases de formulations.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-xl transition-shadow">
+                        <div class="text-4xl mb-4">🧴</div><h3 class="text-xl font-bold mb-2">Cosmétique</h3>
+                        <p class="text-gray-600">Éthanol de haute qualité pour la formulation de parfums, désinfectants ou produits de soin.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-xl transition-shadow">
+                        <div class="text-4xl mb-4">🔬</div><h3 class="text-xl font-bold mb-2">R&D Scientifique</h3>
+                        <p class="text-gray-600">Un outil fiable et constant pour les laboratoires explorant de nouveaux bioprocédés.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-xl transition-shadow">
+                        <div class="text-4xl mb-4">🎓</div><h3 class="text-xl font-bold mb-2">Universités & Formations Techniques</h3>
+                        <p class="text-gray-600">Support pédagogique pour l'apprentissage des biotechnologies et des fermentations.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-xl transition-shadow">
+                        <div class="text-4xl mb-4">🍎</div><h3 class="text-xl font-bold mb-2">Industrie Agroalimentaire</h3>
+                        <p class="text-gray-600">Applications dans les processus de fermentation pour l'industrie alimentaire.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="apropos" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center"><h2 class="text-3xl font-bold mb-12">Pionniers de l'Innovation Durable</h2></div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Photo de l'équipe ou illustration de la vision retirée comme demandé -->
+                    <div class="md:col-span-2 text-center"> <!-- Pour centrer le contenu restant si la photo est enlevée -->
+                        <h3 class="text-2xl font-bold text-primary mb-4">Notre Mission et Vision</h3>
+                        <p class="text-gray-600 mb-4">Né d'une passion pour la biotechnologie et d'un engagement pour la planète, AlgoStart a été fondé pour exploiter le potentiel immense des algues marines. Nous transformons une ressource naturelle en une solution technologique de pointe.</p>
+                        <p class="text-gray-600">Notre mission est de concevoir et fabriquer des dispositifs de starter d’éthanol à base d’algues marines, pour une fermentation durable, naturelle et rapide, répondant aux besoins des besoins des industries modernes.</p>
+                        <p class="text-600">Nous croyons fermement au potentiel des bioprocédés pour un avenir plus vert. Notre équipe de passionnés de R&D travaille constamment à optimiser nos formules pour offrir des produits de la plus haute qualité.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="ressources" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-3xl font-bold mb-4">Ressources & Documentation</h2>
+                 <p class="max-w-3xl mx-auto text-gray-600 mb-12">Pour nos partenaires B2B, nous mettons à disposition des documents techniques détaillés. Téléchargez nos fiches pour intégrer facilement AlgoStart® dans vos processus.</p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+                     <div class="bg-gray-50 p-8 rounded-lg shadow-sm text-left max-w-sm">
+                        <h3 class="font-bold text-primary text-xl mb-2">Fiche Technique AlgoStart®</h3>
+                        <p class="text-gray-600 mb-4">Toutes les spécifications, données de performance et protocoles d'utilisation dans un seul document.</p>
+                        <a href="#" class="font-bold text-primary hover:underline">Télécharger le PDF →</a>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm text-left max-w-sm">
+                        <h3 class="font-bold text-primary text-xl mb-2">Fiche de Données de Sécurité</h3>
+                        <p class="text-gray-600 mb-4">Informations essentielles sur la manipulation, le stockage et la sécurité du produit.</p>
+                        <a href="#" class="font-bold text-primary hover:underline">Télécharger le PDF →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-4">Foire Aux Questions (FAQ)</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-12">Retrouvez ici les réponses aux questions les plus fréquentes concernant AlgoStart® et son utilisation.</p>
+                <div class="max-w-3xl mx-auto text-left">
+                    <div class="border-b border-gray-300 py-4">
+                        <button class="faq-toggle w-full flex justify-between items-center font-semibold text-lg text-[#333333] hover:text-primary transition">
+                            Durée de conservation d'AlgoStart® ?
+                            <span class="faq-icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content text-gray-700 mt-2 hidden">
+                            <p>AlgoStart® est stable et se conserve jusqu'à 6 mois à température ambiante, dans son emballage d'origine, à l'abri de l'humidité.</p>
+                        </div>
+                    </div>
+                    <div class="border-b border-gray-300 py-4">
+                        <button class="faq-toggle w-full flex justify-between items-center font-semibold text-lg text-[#333333] hover:text-primary transition">
+                            Quelle est l'efficacité de fermentation ?
+                            <span class="faq-icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content text-gray-700 mt-2 hidden">
+                            <p>Le processus de fermentation commence en 6 heures. La quantité d'éthanol produite dépend du volume d'eau et de la concentration en glucose initiale, ainsi que de la température d'incubation.</p>
+                        </div>
+                    </div>
+                    <div class="border-b border-gray-300 py-4">
+                        <button class="faq-toggle w-full flex justify-between items-center font-semibold text-lg text-[#333333] hover:text-primary transition">
+                            Comment doser AlgoStart® ?
+                            <span class="faq-icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content text-gray-700 mt-2 hidden">
+                            <p>Il est recommandé d'utiliser un disque AlgoStart® pour 500 mL à 1 L d'eau stérile ou légèrement sucrée (1-2 % glucose).</p>
+                        </div>
+                    </div>
+                    <div class="border-b border-gray-300 py-4">
+                        <button class="faq-toggle w-full flex justify-between items-center font-semibold text-lg text-[#333333] hover:text-primary transition">
+                            Conditions de livraison et transport ?
+                            <span class="faq-icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content text-gray-700 mt-2 hidden">
+                            <p>Étant léger et sans risque de fuite, AlgoStart® est facile à transporter. Pour les conditions de livraison, veuillez nous contacter via le formulaire de contact ou le chatbot.</p>
+                        </div>
+                    </div>
+                     <div class="border-b border-gray-300 py-4">
+                        <button class="faq-toggle w-full flex justify-between items-center font-semibold text-lg text-[#333333] hover:text-primary transition">
+                            Comment lancer une commande ?
+                            <span class="faq-icon text-xl">+</span>
+                        </button>
+                        <div class="faq-content text-gray-700 mt-2 hidden">
+                            <p>Vous pouvez simuler un devis via notre chatbot ou utiliser le module de commande dans la section "Module de Commande & Espace Professionnel". Pour une commande finale, vous serez guidé vers un devis personnalisé ou une pro-forma.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-primary">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold text-white mb-4">Contactez-nous</h2>
+                <p class="max-w-2xl mx-auto text-white/90 mb-12">Prêt à innover ? Notre équipe est prête à répondre à vos questions et à discuter de vos projets. Remplissez le formulaire pour demander un devis ou des échantillons.</p>
+                <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-2xl">
+                    <form>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div><label for="form-name" class="block text-left text-sm font-medium text-gray-700 mb-1">Nom</label><input type="text" id="form-name" class="w-full px-4 py-2 border border-gray-300 rounded-md"></div>
+                            <div><label for="form-email" class="block text-left text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" id="form-email" class="w-full px-4 py-2 border border-gray-300 rounded-md"></div>
+                        </div>
+                        <div class="mb-6"><label for="form-subject" class="block text-left text-sm font-medium text-gray-700 mb-1">Sujet</label><input type="text" id="form-subject" class="w-full px-4 py-2 border border-gray-300 rounded-md"></div>
+                        <div class="mb-6"><label for="form-message" class="block text-left text-sm font-medium text-gray-700 mb-1">Message</label><textarea id="form-message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md"></textarea></div>
+                        <div class="text-center"><button type="submit" class="btn-primary font-bold py-3 px-10 rounded-full w-full md:w-auto shadow-lg hover:shadow-xl transition-shadow">Envoyer</button></div>
+                    </form>
+                    <div class="mt-8 text-center">
+                        <h3 class="text-xl font-bold text-primary mb-4">Nos Coordonnées</h3>
+                        <p class="text-gray-700">WhatsApp : <a href="https://wa.me/213557197853" class="text-[#00B8A9] hover:underline">+213557197853</a></p>
+                        <p class="text-gray-700">Email : <a href="mailto:algaenovations.business@gmail.com" class="text-[#00B8A9] hover:underline">algaenovations.business@gmail.com</a></p>
+                        <p class="text-gray-700">Localisation : Algérie</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="font-bold text-lg mb-2">AlgoStart</p>
+            <p class="text-sm text-gray-400">&copy; 2025 AlgoStart. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Bouton Chatbot -->
+    <button id="chat-button">💬 Chat</button>
+
+    <!-- Fenêtre Chatbot -->
+    <div id="chat-window" class="hidden">
+        <div class="chat-header">
+            <h3 class="font-semibold">Chatbot AlgoStart ✨</h3>
+            <button id="close-chat" class="text-white text-xl leading-none">&times;</button>
+        </div>
+        <div id="chat-messages"></div>
+        <div class="chat-input-area">
+            <div class="chat-feature-buttons">
+                <button id="compare-products-button" class="btn-chat-feature">Comparer les produits ✨</button>
+                <button id="troubleshoot-button" class="btn-chat-feature">Dépannage Fermentation ✨</button>
+            </div>
+            <div class="flex w-full"> <!-- Added flex container for input and send button -->
+                <textarea type="text" id="user-input" class="chat-input flex-grow" placeholder="Écrivez votre message..." rows="1"></textarea>
+                <button id="send-button" class="send-button">Envoyer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Historique global du chat pour maintenir le contexte
+        const chatHistory = [
+            // Message initial du bot qui est affiché au début (ne pas l'ajouter à l'historique car c'est un prompt statique)
+            { role: "model", parts: [{ text: "Bonjour ! Je suis le Chatbot AlgoStart. Je peux répondre à vos questions sur AlgoStart®, son utilisation, ses avantages, ou vous guider pour une demande de devis. Comment puis-je vous aider ?" }] }
+        ];
+
+        // Rôle de base et informations du produit pour l'IA
+        const baseSystemPrompt = `
+            Vous êtes un chatbot pour l'entreprise AlgoStart, spécialisée dans le produit AlgoStart®.
+            Informations Générales sur le Projet :
+            - Nom de l’entreprise : AlgoStart
+            - Nom du produit : AlgoStart® (également connu sous SpiruStart® dans certains contextes)
+            - Catégorie : Dispositif d'amorçage pour la fabrication d’éthanol.
+            - Type de produit : Sachet fermentaire à base d’algues marines (spiruline), biodégradable. La forme galénique est un disque de coton stérile (Ø 5cm, épaisseur 4mm, poids net ±4g) encapsulant des agents biologiques et nutritifs.
+            - Usage : Permet de produire de l’éthanol après 6h de mise en bouteille.
+            - Packaging : Unité : sachet (format type Lipton). Vente : boîte de 10 sachets.
+            - Marché ciblé (B2B) : Laboratoires pharmaceutiques, Cosmétique, R&D scientifique, Universités, Industrie agroalimentaire, Écoles & formations techniques.
+            - Mission d’AlgoStart : Concevoir et fabriquer des dispositifs de starter d’éthanol à base d’algues marines, pour une fermentation durable, naturelle et rapide, répondant aux besoins des industries modernes.
+
+            Mode d’emploi :
+            1. Remplir une bouteille (500 ml à 1L) d’eau stérile ou légèrement sucrée (1 % glucose).
+            2. Insérer un disque starter.
+            3. Fermer hermétiquement et maintenir à température ambiante (30–37°C idéalement).
+            4. Après 6 heures, le processus de fermentation produit de l’éthanol (quantité dépendant du volume d’eau et de la concentration du starter).
+
+            Avantages du produit :
+            - Activation rapide (moins de 6 h)
+            - Biodégradable et sans résidus toxiques
+            - Facile à utiliser en laboratoire ou industrie (prêt à l'emploi, aucune préparation préalable)
+            - Ne nécessite pas d’infrastructure lourde
+            - Valorisation des algues (spiruline)
+            - Stable : conservation à température ambiante (jusqu’à 6 mois)
+            - Transportable : léger, sans risque de fuite
+
+            Fonctionnalités que vous pouvez proposer :
+            - Répondre aux questions fréquentes sur l'utilisation du sachet, la conservation, le temps de fermentation, la livraison, les conditions d’utilisation selon le secteur, et le lancement de commande.
+            - Guider l’utilisateur dans le choix du bon degré d’éthanol (96 %, Entre 70 % et 96 %, Entre 40 % et 70 %, Moins de 40 %) en demandant l'usage prévu et en demandant de préciser le pourcentage désiré.
+            - Simuler un devis rapide (en demandant des précisions sur la quantité et le degré de pureté souhaité, puis en donnant un exemple de gamme de prix).
+            - Générer une fiche produit simplifiée (en résumant les informations clés d'AlgoStart®).
+            - Pour les coordonnées : WhatsApp : +213557197853, Email : algaenovations.business@gmail.com, Localisation : Algérie.
+            Soyez concis, professionnel et aidez l'utilisateur à trouver les informations qu'il cherche.
+            Si la question ne concerne pas AlgoStart, veuillez poliment rediriger l'utilisateur vers les sujets pertinents.
+        `;
+
+        let isTroubleshootingActive = false; // Drapeau pour le mode dépannage
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            if (!mobileMenu.classList.contains('hidden')) {
+                                mobileMenu.classList.add('hidden');
+                            }
+                        }
+                    }
+                });
+            });
+
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Starter Traditionnel', 'AlgoStart®'],
+                    datasets: [{
+                        label: 'Temps de Fermentation (en heures)',
+                        data: [24, 6],
+                        backgroundColor: ['rgba(0, 184, 169, 0.6)', 'rgba(1, 95, 92, 0.8)'], /* Mis à jour avec la nouvelle couleur primaire */
+                        borderColor: ['rgba(0, 184, 169, 1)', 'rgba(1, 95, 92, 1)'], /* Mis à jour avec la nouvelle couleur primaire */
+                        borderWidth: 1,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Heures' } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            const faqToggles = document.querySelectorAll('.faq-toggle');
+            faqToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.faq-icon');
+                    content.classList.toggle('hidden');
+                    if (content.classList.contains('hidden')) {
+                        icon.textContent = '+';
+                    } else {
+                        icon.textContent = '-';
+                    }
+                });
+            });
+
+            // Références aux éléments du chatbot
+            const chatButton = document.getElementById('chat-button');
+            const chatWindow = document.getElementById('chat-window');
+            const closeChatButton = document.getElementById('close-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const compareProductsButton = document.getElementById('compare-products-button');
+            const troubleshootButton = document.getElementById('troubleshoot-button');
+
+            // Afficher le message initial du bot au chargement
+            appendMessage('bot', chatHistory[0].parts[0].text, false); 
+
+            chatButton.addEventListener('click', () => {
+                chatWindow.classList.toggle('hidden');
+                // Toggle active class for opacity transition
+                chatWindow.classList.toggle('active');
+            });
+
+            closeChatButton.addEventListener('click', () => {
+                chatWindow.classList.add('hidden');
+                // Remove active class to fade out
+                chatWindow.classList.remove('active');
+            });
+
+            function appendMessage(sender, text, addToHistory = true) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', sender);
+                messageElement.textContent = text;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                if (addToHistory) {
+                    // Limiter l'historique pour éviter des payloads trop lourds, ex: 10 dernières interactions
+                    if (chatHistory.length >= 20) { // Conserver environ 10 paires user/model
+                        // Garde le premier message du bot (le message de bienvenue) et supprime les plus anciens ensuite
+                        chatHistory.splice(1, 2); // Supprime la plus ancienne paire user/model après le message de bienvenue
+                    }
+                    chatHistory.push({ role: sender === 'user' ? 'user' : 'model', parts: [{ text: text }] });
+                }
+            }
+
+            async function callGeminiAPI(systemPrompt, userPromptForThisCall) {
+                const loadingDots = document.createElement('div');
+                loadingDots.classList.add('loading-dots');
+                loadingDots.innerHTML = '<span></span><span></span><span></span>';
+                chatMessages.appendChild(loadingDots);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                try {
+                    // Le payload inclut le systemPrompt initial, puis l'historique du chat, puis le prompt spécifique de l'utilisateur pour cet appel
+                    const fullChatHistoryForApi = [{ role: "user", parts: [{ text: systemPrompt }] }].concat(chatHistory.slice(1)); // Exclure le message initial du bot, il est dans le systemPrompt.
+                    fullChatHistoryForApi.push({ role: "user", parts: [{ text: userPromptForThisCall }] });
+
+
+                    const payload = { contents: fullChatHistoryForApi };
+                    const apiKey = "AIzaSyB_dA5P34DMk5ymEDVsOaY9_i8r1MnMqJ0"; // VOTRE CLÉ API EST ICI
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                    const result = await response.json();
+                    
+                    chatMessages.removeChild(loadingDots);
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        appendMessage('bot', text);
+                    } else {
+                        appendMessage('bot', "Désolé, je n'ai pas pu générer de réponse pour le moment. Veuillez réessayer.");
+                    }
+                } catch (error) {
+                    chatMessages.removeChild(loadingDots);
+                    console.error("Erreur de communication avec l'IA:", error);
+                    appendMessage('bot', "Une erreur est survenue lors de la communication avec l'IA. Veuillez vérifier votre connexion ou réessayer plus tard.");
+                }
+            }
+
+            // Gestion de l'envoi de messages (saisie utilisateur ou fonctionnalité)
+            sendButton.addEventListener('click', () => {
+                const prompt = userInput.value.trim();
+                if (prompt === '') return;
+
+                if (isTroubleshootingActive) {
+                    appendMessage('user', prompt); // Affiche le problème de l'utilisateur
+                    isTroubleshootingActive = false; // Réinitialise le mode
+                    const troubleshootingPrompt = `L'utilisateur rencontre le problème suivant avec la fermentation : "${prompt}". Veuillez fournir des causes possibles et des solutions basées sur les informations d'AlgoStart et les bonnes pratiques de fermentation.`;
+                    callGeminiAPI(baseSystemPrompt, troubleshootingPrompt);
+                } else {
+                    appendMessage('user', prompt); // Affiche le message général de l'utilisateur
+                    callGeminiAPI(baseSystemPrompt, prompt);
+                }
+                userInput.value = '';
+            });
+
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) { // Envoyer avec Entrée, ne pas envoyer avec Shift+Entrée
+                    e.preventDefault();
+                    sendButton.click(); // Simule un clic sur le bouton d'envoi
+                }
+            });
+
+            // Bouton "Comparer les produits"
+            compareProductsButton.addEventListener('click', () => {
+                isTroubleshootingActive = false; // Assure que le mode dépannage est désactivé
+                appendMessage('user', 'Comparer les produits ✨');
+                const comparisonPrompt = `Veuillez effectuer une comparaison détaillée entre AlgoStart® et les "starters traditionnels" en vous basant sur les critères suivants : temps de fermentation, biodégradabilité, nécessité d'infrastructure, facilité d'utilisation, et transportabilité. Utilisez uniquement les informations que vous avez sur AlgoStart®.`;
+                callGeminiAPI(baseSystemPrompt, comparisonPrompt);
+            });
+
+            // Bouton "Dépannage Fermentation"
+            troubleshootButton.addEventListener('click', () => {
+                isTroubleshootingActive = true; // Active le mode dépannage
+                appendMessage('user', 'Dépannage Fermentation ✨');
+                appendMessage('bot', 'Quel problème de fermentation rencontrez-vous ? (ex: fermentation lente, faible rendement, odeur inattendue)');
+            });
+        });
+    </script>
+</body>
+</html>
